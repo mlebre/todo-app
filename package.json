@@ -12,8 +12,13 @@
     "format:check": "prettier --check \"src/**/*.{ts,html,css,scss,json}\""
   },
   "prettier": {
-    "printWidth": 100,
+    "printWidth": 120,
+    "tabWidth": 4,
     "singleQuote": true,
+    "trailingComma": "es5",
+    "semi": true,
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
     "overrides": [
       {
         "files": "*.html",
@@ -25,6 +30,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.2.14",
     "@angular/common": "^20.2.0",
     "@angular/compiler": "^20.2.0",
     "@angular/core": "^20.2.0",

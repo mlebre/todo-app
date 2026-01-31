@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
+import { List } from '../model/list';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
-export class Todo {}
+export class Todo {
+    private todos: List[] = [];
+    
+    getLists(): List[] {
+        return this.todos;
+    }
+
+    createList(title: string): void {
+    }
+
+}
