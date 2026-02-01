@@ -1,27 +1,55 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ModalNewList } from '../modal-new-list/modal-new-list.component';
+import { TodoService } from '../../services/todo.service';
+import { Subscription } from 'rxjs';
+import { ListDisplay } from '../list/list-display.component';
+import { State } from '../../model/item';
+import { List } from '../../model/list';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-home',
-    imports: [],
+    imports: [ListDisplay, CommonModule],
     templateUrl: './home.component.html',
     styleUrl: './home.component.css',
 })
-export class Home {
+export class Home implements OnInit, OnDestroy {
     dialog = inject(Dialog);
 
-    onCreateList(event: Event) {
+    private listSubscription?: Subscription;
+    private dialogSubscription?: Subscription;
+    protected listsToDo?: List[];
+    protected listsProgress?: List[];
+    protected listsDone?: List[];
+
+    constructor(private todoService: TodoService) {}
+
+    ngOnInit() {
+        this.listSubscription = this.todoService.lists.subscribe(lists => {
+            this.listsToDo = lists.filter(list => list.status === State.TODO);
+            this.listsProgress = lists.filter(list => list.status === State.IN_PROGRESS);
+            this.listsDone = lists.filter(list => list.status === State.DONE);
+        });
+    }
+
+    ngOnDestroy() {
+        this.listSubscription?.unsubscribe();
+        this.dialogSubscription?.unsubscribe();
+    }
+
+    onCreateList() {
         const dialogRef = this.dialog.open(ModalNewList, {
             width: '400px',
         });
 
+        // Unsubscribe from previous dialog subscription if it exists
+        this.dialogSubscription?.unsubscribe();
+
         dialogRef.closed.subscribe(result => {
-            if (result) {
-                console.log('New list title:', result);
-                // Add your list creation logic here
+            if (result && typeof result === 'string') {
+                this.todoService.createList(result);
             }
         });
     }
-
 }
