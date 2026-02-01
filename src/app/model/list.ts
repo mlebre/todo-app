@@ -1,9 +1,10 @@
-import { Item } from './item';
+import { Item, State } from './item';
 
 export interface List {
-  id: number;
-  title: string;
-  items: Item[];
-  createdAt: Date;
-  updatedAt: Date;
+    id: string;
+    title: string;
+    items: Item[];
+    createdAt: Date;
+    updatedAt?: Date;
+    status: State;
 }
