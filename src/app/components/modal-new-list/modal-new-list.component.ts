@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
@@ -14,7 +14,7 @@ export class ModalNewList {
     dialogRef = inject(DialogRef);
     data = inject(DIALOG_DATA);
 
-    title: string = '';
+    title = '';
 
     onConfirm() {
         if (this.title.trim()) {

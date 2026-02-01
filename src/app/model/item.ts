@@ -4,9 +4,9 @@ export interface Item {
   description?: string;
   assignedTo?: string;
   status: State;
-  dueDate: Date;
+  dueDate?: Date;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
 export enum State {
