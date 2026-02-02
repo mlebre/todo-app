@@ -47,6 +47,9 @@ export class Home implements OnInit, OnDestroy {
             width: '400px',
         });
 
+        // Unsubscribe from previous dialog subscription if it exists
+        this.dialogSubscription?.unsubscribe();
+
         this.dialogSubscription = dialogRef.closed.subscribe(result => {
             if (result && typeof result === 'string') {
                 console.log('New list title:', result);
