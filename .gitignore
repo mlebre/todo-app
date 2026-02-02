@@ -19,3 +19,6 @@ yarn-error.log
 /connect.lock
 /coverage
 /libpeerconnection.log
+
+# Build output
+/dist
