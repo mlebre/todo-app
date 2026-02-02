@@ -7,9 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
     providedIn: 'root',
 })
-
 export class TodoService {
-
     private lists$: BehaviorSubject<List[]> = new BehaviorSubject<List[]>([]);
 
     constructor(private localStorageService: LocalStorageService) {
@@ -17,19 +15,17 @@ export class TodoService {
     }
 
     readonly lists = this.lists$.asObservable();
-    
 
     createList(title: string): void {
         const newList: List = {
             id: crypto.randomUUID(),
             title: title,
-            items: [], 
-            createdAt: new Date(), 
-            status : State.TODO 
+            items: [],
+            createdAt: new Date(),
+            status: State.TODO,
         };
         const updatedLists = [...this.lists$.getValue(), newList];
-        this.lists$.next(updatedLists)
+        this.lists$.next(updatedLists);
         this.localStorageService.saveLists(updatedLists);
     }
-
 }

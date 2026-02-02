@@ -19,6 +19,7 @@ export class Home implements OnInit, OnDestroy {
     dialog = inject(Dialog);
 
     private listSubscription?: Subscription;
+    private dialogSubscription?: Subscription;
     protected listsToDo?: List[];
     protected listsProgress?: List[];
     protected listsDone?: List[];
@@ -38,6 +39,7 @@ export class Home implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.listSubscription?.unsubscribe();
+        this.dialogSubscription?.unsubscribe();
     }
 
     onCreateList() {
@@ -45,7 +47,7 @@ export class Home implements OnInit, OnDestroy {
             width: '400px',
         });
 
-        dialogRef.closed.subscribe(result => {
+        this.dialogSubscription = dialogRef.closed.subscribe(result => {
             if (result && typeof result === 'string') {
                 console.log('New list title:', result);
                 this.todoService.createList(result);

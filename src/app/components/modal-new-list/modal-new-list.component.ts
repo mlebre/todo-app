@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
-
 @Component({
     selector: 'app-modal-new-list',
     imports: [CommonModule, FormsModule],
