@@ -1,1 +1,16 @@
-<ng-container> {{ list.title }} ({{ list.items.length }} items) </ng-container>
+<div class="list-container" 
+    [style.--accent-light]="colors?.light"
+    [style.--accent-dark]="colors?.dark"
+    [style.--chevron-color]="colors?.chevron"> 
+  <div class="list-container__accent"></div>
+  <div class="list-container__content">
+    <h3 class="list-container__title">{{ list.title }}</h3>
+    <span class="list-container__count">{{ list.items.length }} items</span>
+  </div>
+
+  <div class="list-container__accent">
+    <svg class="list-container__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </div>
+</div>
