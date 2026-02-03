@@ -21,7 +21,7 @@
 }
 
 /* Accent bar */
-.list-container__accent {
+.accent {
     flex-shrink: 0;
     width: 32px;
     height: 56px;
@@ -32,7 +32,7 @@
     position: relative;
 }
 
-.list-container__chevron {
+.action {
     width: 18px;
     height: 18px;
     color: #ffffff;
@@ -40,12 +40,12 @@
 }
 
 /* Content area */
-.list-container__content {
+.content {
     flex: 1;
     min-width: 0; /* allows text truncation */
 }
 
-.list-container__title {
+.title {
     margin: 0;
     font-size: 14px;
     font-weight: 600;
@@ -53,9 +53,9 @@
     line-height: 1.4;
 }
 
-/* Optional: badge for item count */
-.list-container__count {
+/* Item count */
+.count {
     font-size: 12px;
     color: #64748b;
-    margin-top: 4px;
+    display: inline-block;
 }

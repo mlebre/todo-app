@@ -15,9 +15,11 @@ export class UtilService {
 
     hashStringToNumber(str: string): number {
         let hash = 0;
-        Array.from(str).forEach(char => {
-            hash += char.charCodeAt(0);
-        });
-        return hash;
+        for (const char of str) {
+            const code = char.charCodeAt(0);
+            hash = (hash << 5) - hash + code; // hash * 31 + code
+            hash |= 0; // Force to 32-bit integer
+        }
+        return Math.abs(hash);
     }
 }
