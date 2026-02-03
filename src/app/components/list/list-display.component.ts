@@ -19,10 +19,6 @@ export class ListDisplay implements OnInit {
         if (!this.list) {
             throw new Error('List input is required');
         }
-        this.colors = this.getAccentColor();
-    }
-
-    getAccentColor(): { light: string; dark: string } {
-        return this.utilService.hashIdToHslColor(this.list.id);
+        this.colors = this.utilService.hashIdToHslColor(this.list.id);
     }
 }
