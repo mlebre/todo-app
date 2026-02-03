@@ -1,0 +1,61 @@
+.list-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.1s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.list-container:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+/* Accent bar */
+.list-container__accent {
+    flex-shrink: 0;
+    width: 32px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--accent-light), var(--accent-dark));
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.list-container__chevron {
+    width: 18px;
+    height: 18px;
+    color: #ffffff;
+    transition: transform 0.25s ease;
+}
+
+/* Content area */
+.list-container__content {
+    flex: 1;
+    min-width: 0; /* allows text truncation */
+}
+
+.list-container__title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+}
+
+/* Optional: badge for item count */
+.list-container__count {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
+}
