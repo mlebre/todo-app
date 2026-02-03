@@ -22,6 +22,7 @@ export class Home implements OnInit, OnDestroy {
     protected listsToDo?: List[];
     protected listsProgress?: List[];
     protected listsDone?: List[];
+    protected isExpanded: Map<string, boolean> = new Map<string, boolean>();
 
     constructor(private todoService: TodoService) {}
 
@@ -30,6 +31,9 @@ export class Home implements OnInit, OnDestroy {
             this.listsToDo = lists.filter(list => list.status === State.TODO);
             this.listsProgress = lists.filter(list => list.status === State.IN_PROGRESS);
             this.listsDone = lists.filter(list => list.status === State.DONE);
+            lists.forEach(list => {
+                this.isExpanded.set(list.id, false);
+            });
         });
     }
 
@@ -51,5 +55,23 @@ export class Home implements OnInit, OnDestroy {
                 this.todoService.createList(result);
             }
         });
+    }
+
+    isListExpanded(listId: string): boolean {
+        return this.isExpanded.get(listId) || false;
+    }
+
+    toogleList(event: string): void {
+        if(this.isListExpanded(event)) {
+            // Collapse current
+            this.isExpanded.set(event, false);
+        } else {
+            // Expand current and collapse others
+            this.isExpanded.forEach((_, key) => {
+                this.isExpanded.set(key, false);
+            });
+            this.isExpanded.set(event, true);
+        }
+        
     }
 }

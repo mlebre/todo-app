@@ -6,7 +6,9 @@
             <h2>📋 To Do</h2>
             <div class="list-items">
                 @for (list of listsToDo; track list.id) {
-                    <app-list-display [list]="list"></app-list-display>
+                    <app-list-display [list]="list"
+                     [isExpanded]="isListExpanded(list.id)"
+                     (toogleList)="toogleList(list.id)"></app-list-display>
                 }
                 @if (!listsToDo || listsToDo.length === 0) {
                     <p class="empty-state">No lists yet</p>
@@ -24,7 +26,6 @@
                 @if (!listsProgress || listsProgress.length === 0) {
                     <p class="empty-state">No lists yet</p>
                 }
-                <!-- Your lists will go here -->
             </div>
         </div>
     </div>

@@ -5,15 +5,39 @@
             <h3 class="title">{{ list.title }}</h3>
             <span class="count">{{ list.items.length }} items</span>
         </div>
-        <div class="accent">
-            <svg class="action" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button
+            type="button"
+            class="accent"
+            aria-label="Add item to {{ list.title }}"
+            (click)="onAddItem()">
+            <svg class="action" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 5v14M5 12h14" />
             </svg>
-        </div>
-        <div class="accent">
-            <svg class="action" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-            </svg>
-        </div>
+        </button>
+        <button
+            type="button"
+            class="accent"
+            aria-label="Expand / Collapse {{ list.title }}"
+            (click)="onExpandCollapse()">
+            @if (isExpanded) {
+                <svg class="action" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+                </svg>
+            } @else {
+                <svg class="action" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+            }
+        </button>
+        @if (isExpanded) {
+            <div class="items-list">
+                @for (item of list.items; track item.id) {
+                    SHow items
+                }
+                @if (!list.items || list.items.length === 0) {
+                    <p class="empty-state">No items yet</p>
+                }
+            </div>
+        }
     </div>
 }
