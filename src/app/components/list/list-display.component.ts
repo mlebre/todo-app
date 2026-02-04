@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { List } from '../../model/list';
 import { UtilService } from '../../services/util.service';
+import { TodoService } from '../../services/todo.service';
+import { ItemDisplay } from '../item/item-display.component';
 
 @Component({
     selector: 'app-list-display',
-    imports: [],
+    imports: [ItemDisplay],
     templateUrl: './list-display.component.html',
     styleUrl: './list-display.component.css',
 })
@@ -14,9 +16,12 @@ export class ListDisplay implements OnInit {
 
     protected colors?: { light: string; dark: string };
 
-    protected toogleList: EventEmitter<string> = new EventEmitter<string>();
+    @Output() toogleList: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(private utilService: UtilService) {}
+    constructor(
+        private utilService: UtilService,
+        private todoService: TodoService
+    ) {}
 
     ngOnInit(): void {
         if (!this.list) {
@@ -26,12 +31,14 @@ export class ListDisplay implements OnInit {
     }
 
     onExpandCollapse(): void {
-        console.log(`Expand/Collapse list ${this.list.id}`);
         this.toogleList.emit(this.list.id);
         this.isExpanded = !this.isExpanded;
     }
 
     onAddItem(): void {
-        console.log(`Add item to list ${this.list.id}`);
+        if (!this.isExpanded) {
+            this.onExpandCollapse();
+        }
+        this.todoService.createItem(this.list.id, '');
     }
 }
