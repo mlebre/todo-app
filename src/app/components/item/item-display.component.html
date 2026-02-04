@@ -1,0 +1,26 @@
+@if (item) {
+    <div class="item-container">
+        @if (item.new) {
+            <input
+                type="text"
+                [(ngModel)]="item.title"
+                placeholder="Enter item title..."
+                (keyup.enter)="onTitleCreation()"
+                (blur)="onTitleCreation()"
+                class="item-input"
+            />
+        } @else {
+            <span class="item-title" [class.completed]="item.status === 'Done'">{{ item.title }}</span>
+        }
+        <div class="checkbox-wrapper">
+            <input
+                type="checkbox"
+                [id]="'item-' + item.id"
+                [checked]="item.status === 'Done'"
+                (change)="onStatusChange($event)"
+                class="item-checkbox"
+            />
+            <label [for]="'item-' + item.id" class="checkbox-label"></label>
+        </div>
+    </div>
+}

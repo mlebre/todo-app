@@ -28,4 +28,20 @@ export class TodoService {
         this.lists$.next(updatedLists);
         this.localStorageService.saveLists(updatedLists);
     }
+
+    createItem(listId: string, title: string): void {
+        const lists = this.lists$.getValue();
+        const list = lists.find(l => l.id === listId);
+        if (list) {
+            list.items.push({
+                id: list.items.length + 1,
+                title: title,
+                createdAt: new Date(),
+                status: State.TODO,
+                new: true,
+            });
+            this.lists$.next(lists);
+            this.localStorageService.saveLists(lists);
+        }
+    }
 }

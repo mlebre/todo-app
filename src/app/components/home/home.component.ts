@@ -62,7 +62,7 @@ export class Home implements OnInit, OnDestroy {
     }
 
     toogleList(event: string): void {
-        if(this.isListExpanded(event)) {
+        if (this.isListExpanded(event)) {
             // Collapse current
             this.isExpanded.set(event, false);
         } else {
@@ -72,6 +72,5 @@ export class Home implements OnInit, OnDestroy {
             });
             this.isExpanded.set(event, true);
         }
-        
     }
 }

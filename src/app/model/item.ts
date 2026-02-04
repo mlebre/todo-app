@@ -1,6 +1,7 @@
 export interface Item {
     id: number;
     title: string;
+    new: boolean;
     description?: string;
     assignedTo?: string;
     status: State;
