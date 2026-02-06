@@ -5,15 +5,11 @@
             <h3 class="title">{{ list.title }}</h3>
             <span class="count">{{ list.items.length }} items</span>
         </div>
+        <button type="button" class="accent" aria-label="Delete list {{ list.title }}" (click)="onDeleteList(list.id)">
+            <i class="fa fa-trash"></i>
+        </button>
         <button type="button" class="accent" aria-label="Add item to {{ list.title }}" (click)="onAddItem()">
-            <svg
-                class="action"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                focusable="false"
-            >
+            <svg class="action" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 5v14M5 12h14" />
             </svg>
         </button>
@@ -36,7 +32,7 @@
         @if (isExpanded) {
             <div class="items-list">
                 @for (item of list.items; track item.id) {
-                    <app-item-display [item]="item"></app-item-display>
+                    <app-item-display [item]="item" (deleteItemId)="onDeleteItem(list.id, $event)"></app-item-display>
                 }
                 @if (!list.items || list.items.length === 0) {
                     <p class="empty-state">No items yet</p>

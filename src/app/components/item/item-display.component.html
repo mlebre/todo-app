@@ -12,7 +12,7 @@
         } @else {
             <span class="item-title" [class.completed]="item.status === 'Done'">{{ item.title }}</span>
         }
-        <div class="checkbox-wrapper">
+        <div class="action-wrapper">
             <input
                 type="checkbox"
                 [id]="'item-' + item.id"
@@ -21,6 +21,11 @@
                 class="item-checkbox"
             />
             <label [for]="'item-' + item.id" class="checkbox-label"></label>
+        </div>
+        <div class="action-wrapper">
+            <button type="button" class="delete-btn" aria-label="Delete {{ item.title }}" (click)="onDelete(item.id)">
+                <i class="fa fa-trash"></i>
+            </button>
         </div>
     </div>
 }

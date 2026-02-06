@@ -29,17 +29,34 @@ export class TodoService {
         this.localStorageService.saveLists(updatedLists);
     }
 
+    deleteList(id: string): void {
+        const updatedLists = this.lists$.getValue().filter(list => list.id !== id);
+        this.lists$.next(updatedLists);
+        this.localStorageService.saveLists(updatedLists);
+    }
+
     createItem(listId: string, title: string): void {
         const lists = this.lists$.getValue();
         const list = lists.find(l => l.id === listId);
         if (list) {
             list.items.push({
-                id: list.items.length + 1,
+                id: Math.max(0, ...list.items.map(item => item.id)) + 1,
                 title: title,
                 createdAt: new Date(),
                 status: State.TODO,
                 new: true,
             });
+            this.lists$.next(lists);
+            this.localStorageService.saveLists(lists);
+        }
+    }
+
+    deleteItem(listId: string, itemId: number): void {
+        const lists = this.lists$.getValue();
+        const list = lists.find(l => l.id === listId);
+        if (list) {
+            list.items = list.items.filter(item => item.id !== itemId);
+            list.updatedAt = new Date();
             this.lists$.next(lists);
             this.localStorageService.saveLists(lists);
         }

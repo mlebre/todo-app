@@ -1,6 +1,6 @@
 .list-container {
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: auto 1fr auto auto auto;
     align-items: center;
     gap: 12px;
     background: #f8f9fa;
@@ -31,6 +31,8 @@
     display: grid;
     place-items: center;
     position: relative;
+    color: #ffffff;
+    transition: transform 0.25s ease;
 }
 
 .action {
@@ -47,6 +49,7 @@ button {
 /* Content area */
 .content {
     flex: 1;
+    max-width: fit-content;
     min-width: 0; /* allows text truncation */
 }
 
