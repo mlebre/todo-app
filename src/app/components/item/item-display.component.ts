@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Item, State } from '../../model/item';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-item-display',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './item-display.component.html',
     styleUrl: './item-display.component.css',
 })
