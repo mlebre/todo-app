@@ -17,7 +17,7 @@
 }
 
 /* Checkbox styling */
-.checkbox-wrapper {
+.action-wrapper {
     position: relative;
     flex-shrink: 0;
 }
@@ -99,4 +99,13 @@
 .item-input:focus {
     border-color: #3182ce;
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #e53e3e;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.2s ease;
 }

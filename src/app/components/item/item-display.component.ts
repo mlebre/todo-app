@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Item, State } from '../../model/item';
 
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class ItemDisplay implements OnInit {
     @Input() item!: Item;
+
+    @Output() deleteItemId: EventEmitter<number> = new EventEmitter<number>();
 
     ngOnInit(): void {
         if (!this.item) {
@@ -29,5 +31,9 @@ export class ItemDisplay implements OnInit {
         const checkbox = event.target as HTMLInputElement;
         this.item.status = checkbox.checked ? State.DONE : State.TODO;
         this.item.updatedAt = new Date();
+    }
+
+    onDelete(id: number): void {
+        this.deleteItemId.emit(id);
     }
 }

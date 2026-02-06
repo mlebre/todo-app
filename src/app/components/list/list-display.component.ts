@@ -35,10 +35,18 @@ export class ListDisplay implements OnInit {
         this.isExpanded = !this.isExpanded;
     }
 
+    onDeleteList(id: string): void {
+        this.todoService.deleteList(id);
+    }
+
     onAddItem(): void {
         if (!this.isExpanded) {
             this.onExpandCollapse();
         }
         this.todoService.createItem(this.list.id, '');
+    }
+
+    onDeleteItem(listId: string, itemId: number): void {
+        this.todoService.deleteItem(listId, itemId);
     }
 }
