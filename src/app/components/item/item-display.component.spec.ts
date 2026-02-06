@@ -1,18 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ItemDisplay } from './item-display.component';
+import { State } from '../../model/item';
 
-import { Item } from './item';
-
-describe('Item', () => {
-    let component: Item;
-    let fixture: ComponentFixture<Item>;
+describe('ItemDisplay', () => {
+    let component: ItemDisplay;
+    let fixture: ComponentFixture<ItemDisplay>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [Item],
+            imports: [ItemDisplay],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(Item);
+        fixture = TestBed.createComponent(ItemDisplay);
         component = fixture.componentInstance;
+        component.item = {
+            id: 1,
+            title: 'Test Item',
+            new: false,
+            status: State.TODO,
+            createdAt: new Date(),
+        };
         fixture.detectChanges();
     });
 
