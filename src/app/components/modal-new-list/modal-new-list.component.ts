@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
 
 @Component({
     selector: 'app-modal-new-list',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './modal-new-list.component.html',
     styleUrl: './modal-new-list.component.css',
 })

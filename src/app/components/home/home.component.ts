@@ -6,11 +6,10 @@ import { Subscription } from 'rxjs';
 import { ListDisplay } from '../list/list-display.component';
 import { State } from '../../model/item';
 import { List } from '../../model/list';
-import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-home',
-    imports: [ListDisplay, CommonModule],
+    imports: [ListDisplay],
     templateUrl: './home.component.html',
     styleUrl: './home.component.css',
 })
