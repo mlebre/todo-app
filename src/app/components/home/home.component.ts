@@ -6,10 +6,11 @@ import { Subscription } from 'rxjs';
 import { ListDisplay } from '../list/list-display.component';
 import { State } from '../../model/item';
 import { List } from '../../model/list';
+import { DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-home',
-    imports: [ListDisplay],
+    imports: [ListDisplay, DragDropModule],
     templateUrl: './home.component.html',
     styleUrl: './home.component.css',
 })
@@ -70,6 +71,22 @@ export class Home implements OnInit, OnDestroy {
                 this.isExpanded.set(key, false);
             });
             this.isExpanded.set(event, true);
+        }
+    }
+
+    onListDropped(event: any): void {
+        if (event.previousContainer === event.container) {
+            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        } else {
+            transferArrayItem(
+                event.previousContainer.data,
+                event.container.data,
+                event.previousIndex,
+                event.currentIndex
+            );
+            const list = event.item.data;
+            const newStatus = event.container.id === 'todoList' ? State.TODO : State.IN_PROGRESS;
+            this.todoService.updateListStatus(list.id, newStatus);
         }
     }
 }

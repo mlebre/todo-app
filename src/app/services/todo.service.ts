@@ -61,4 +61,15 @@ export class TodoService {
             this.localStorageService.saveLists(lists);
         }
     }
+
+    updateListStatus(listId: string, newStatus: State): void {
+        const lists = this.lists$.getValue();
+        const list = lists.find(l => l.id === listId);
+        if (list) {
+            list.status = newStatus;
+            list.updatedAt = new Date();
+            this.lists$.next(lists);
+            this.localStorageService.saveLists(lists);
+        }
+    }
 }
