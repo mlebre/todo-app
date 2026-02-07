@@ -4,9 +4,18 @@
     <div class="lists-grid">
         <div class="list-column">
             <h2>📋 To Do</h2>
-            <div class="list-items">
+            <div
+                class="list-items"
+                cdkDropList
+                [cdkDropListData]="listsToDo"
+                id="todoList"
+                [cdkDropListConnectedTo]="['progressList']"
+                (cdkDropListDropped)="onListDropped($event)"
+            >
                 @for (list of listsToDo; track list.id) {
                     <app-list-display
+                        cdkDrag
+                        [cdkDragData]="list"
                         [list]="list"
                         [isExpanded]="isListExpanded(list.id)"
                         (toogleList)="toogleList(list.id)"
@@ -21,9 +30,22 @@
 
         <div class="list-column">
             <h2>🔄 In Progress</h2>
-            <div class="list-items">
+            <div
+                class="list-items"
+                cdkDropList
+                [cdkDropListData]="listsProgress"
+                id="progressList"
+                [cdkDropListConnectedTo]="['todoList']"
+                (cdkDropListDropped)="onListDropped($event)"
+            >
                 @for (list of listsProgress; track list.id) {
-                    <app-list-display [list]="list"></app-list-display>
+                    <app-list-display
+                        cdkDrag
+                        [cdkDragData]="list"
+                        [list]="list"
+                        [isExpanded]="isListExpanded(list.id)"
+                        (toogleList)="toogleList(list.id)"
+                    ></app-list-display>
                 }
                 @if (!listsProgress || listsProgress.length === 0) {
                     <p class="empty-state">No lists yet</p>

@@ -7,6 +7,7 @@ import { Item } from '../model/item';
 })
 export class LocalStorageService {
     saveLists(data: List[]) {
+        console.log('Save');
         localStorage.setItem('todoLists', JSON.stringify(data));
     }
 
