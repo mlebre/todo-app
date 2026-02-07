@@ -3,6 +3,7 @@ import { List } from '../../model/list';
 import { UtilService } from '../../services/util.service';
 import { TodoService } from '../../services/todo.service';
 import { ItemDisplay } from '../item/item-display.component';
+import { State } from '../../model/item';
 
 @Component({
     selector: 'app-list-display',
@@ -15,6 +16,7 @@ export class ListDisplay implements OnInit {
     @Input() isExpanded = false;
 
     protected colors?: { light: string; dark: string };
+    protected isInProgress = false;
 
     @Output() toogleList: EventEmitter<string> = new EventEmitter<string>();
 
@@ -28,6 +30,7 @@ export class ListDisplay implements OnInit {
             throw new Error('List input is required');
         }
         this.colors = this.utilService.hashIdToHslColor(this.list.id);
+        this.isInProgress = this.list.status === State.IN_PROGRESS;
     }
 
     onExpandCollapse(): void {
@@ -48,5 +51,9 @@ export class ListDisplay implements OnInit {
 
     onDeleteItem(listId: string, itemId: number): void {
         this.todoService.deleteItem(listId, itemId);
+    }
+
+    onCompleteList(): void {
+        this.todoService.updateListStatus(this.list.id, State.DONE);
     }
 }

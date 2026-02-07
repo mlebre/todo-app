@@ -20,6 +20,16 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 5v14M5 12h14" />
             </svg>
         </button>
+        @if (isInProgress) {
+            <div class="accent">
+                <input
+                    type="checkbox"
+                    class="item-checkbox"
+                    aria-label="Complete {{ list.title }}"
+                    (change)="onCompleteList()"
+                />
+            </div>
+        }
         <button
             type="button"
             class="accent"

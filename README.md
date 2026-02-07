@@ -57,3 +57,10 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## TO DO
+1. Voir les listes done
+2. Faire en sorte que les listes soient visibles inter navigateurs et sessiions
+3. Fix: sur une liste expanded, l'ajout d'un nouvel item replie la liste en plus de créer l'item. 
+4. Github action pour lint & test ok avant de merger. 
+5. Test plus robustes sur les services (et components) ? 
