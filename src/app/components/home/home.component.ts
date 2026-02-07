@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { ListDisplay } from '../list/list-display.component';
 import { State } from '../../model/item';
 import { List } from '../../model/list';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-home',
@@ -75,13 +75,17 @@ export class Home implements OnInit, OnDestroy {
     }
 
     onListDropped(event: any): void {
-        const previousContainerId = event.previousContainer.id;
-        const currentContainerId = event.container.id;
-        console.log('Drop', previousContainerId, currentContainerId, event);
-        if (previousContainerId !== currentContainerId) {
-            console.log('Moved');
+        if (event.previousContainer === event.container) {
+            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        } else {
+            transferArrayItem(
+                event.previousContainer.data,
+                event.container.data,
+                event.previousIndex,
+                event.currentIndex
+            );
             const list = event.item.data;
-            const newStatus = currentContainerId === 'todoList' ? State.TODO : State.IN_PROGRESS;
+            const newStatus = event.container.id === 'todoList' ? State.TODO : State.IN_PROGRESS;
             this.todoService.updateListStatus(list.id, newStatus);
         }
     }
