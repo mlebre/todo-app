@@ -7,10 +7,12 @@ import { ListDisplay } from '../list/list-display.component';
 import { State } from '../../model/item';
 import { List } from '../../model/list';
 import { DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Router } from '@angular/router';
+import { PageLayout } from '../page-layout/page-layout.component';
 
 @Component({
     selector: 'app-home',
-    imports: [ListDisplay, DragDropModule],
+    imports: [ListDisplay, DragDropModule, PageLayout],
     templateUrl: './home.component.html',
     styleUrl: './home.component.css',
 })
@@ -24,7 +26,10 @@ export class Home implements OnInit, OnDestroy {
     protected listsDone?: List[];
     protected isExpanded: Map<string, boolean> = new Map<string, boolean>();
 
-    constructor(private todoService: TodoService) {}
+    constructor(
+        private todoService: TodoService,
+        protected router: Router
+    ) {}
 
     ngOnInit() {
         this.listSubscription = this.todoService.lists.subscribe(lists => {
@@ -89,5 +94,9 @@ export class Home implements OnInit, OnDestroy {
             const newStatus = event.container.id === 'todoList' ? State.TODO : State.IN_PROGRESS;
             this.todoService.updateListStatus(list.id, newStatus);
         }
+    }
+
+    onViewDoneLists() {
+        this.router.navigate(['/done']);
     }
 }

@@ -1,6 +1,4 @@
-<div class="home-container">
-    <h1>My Todo Lists</h1>
-
+<app-page-layout title="My Todo Lists">
     <div class="lists-grid" cdkDropListGroup>
         <div class="list-column">
             <h2>📋 To Do</h2>
@@ -56,6 +54,6 @@
 
     <div class="actions">
         <button class="btn-primary" (click)="onCreateList()">+ Add New List</button>
-        <button class="btn-secondary">✅ View Done Lists</button>
+        <button class="btn-secondary" (click)="onViewDoneLists()">✅ View Done Lists</button>
     </div>
-</div>
+</app-page-layout>
