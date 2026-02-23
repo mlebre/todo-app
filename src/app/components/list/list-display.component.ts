@@ -16,9 +16,10 @@ export class ListDisplay implements OnInit {
     @Input() isExpanded = false;
 
     protected colors?: { light: string; dark: string };
-    protected isInProgress = false;
+    protected isStarted = false;
 
     @Output() toogleList: EventEmitter<string> = new EventEmitter<string>();
+    @Output() undoList: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(
         private utilService: UtilService,
@@ -30,7 +31,7 @@ export class ListDisplay implements OnInit {
             throw new Error('List input is required');
         }
         this.colors = this.utilService.hashIdToHslColor(this.list.id);
-        this.isInProgress = this.list.status === State.IN_PROGRESS;
+        this.isStarted = this.list.status === State.IN_PROGRESS || this.list.status === State.DONE;
     }
 
     onExpandCollapse(): void {
@@ -53,7 +54,11 @@ export class ListDisplay implements OnInit {
         this.todoService.deleteItem(listId, itemId);
     }
 
-    onCompleteList(): void {
-        this.todoService.updateListStatus(this.list.id, State.DONE);
+    onCheckList(): void {
+        if (this.list.status === State.IN_PROGRESS) {
+            this.todoService.updateListStatus(this.list.id, State.DONE);
+        } else {
+            this.undoList.emit(this.list.id);
+        }
     }
 }

@@ -40,10 +40,16 @@
     height: 18px;
     color: #ffffff;
     transition: transform 0.25s ease;
+    display: block;
 }
 
 button {
     border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
 }
 
 /* Content area */
