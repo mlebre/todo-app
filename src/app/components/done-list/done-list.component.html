@@ -2,7 +2,8 @@
     <div class="list-column">
         <div class="list-items">
             @for (list of listsDone; track list.id) {
-                <app-list-display [list]="list" [isExpanded]="isListExpanded(list.id)"></app-list-display>
+                <app-list-display [list]="list" [isExpanded]="isListExpanded(list.id)" (undoList)="listToUndo($event)">
+                </app-list-display>
             }
             @if (!listsDone || listsDone.length === 0) {
                 <p class="empty-state">No lists yet</p>
@@ -12,5 +13,6 @@
 
     <div class="actions">
         <button class="btn-primary" (click)="onGoBack()">Back</button>
+        <button class="btn-secondary" (click)="onUndoLists()">Undo lists</button>
     </div>
 </app-page-layout>

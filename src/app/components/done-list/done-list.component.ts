@@ -15,6 +15,7 @@ import { ListDisplay } from '../list/list-display.component';
 })
 export class DoneListComponent implements OnInit, OnDestroy {
     protected listsDone?: List[];
+    protected listsToUndo: List[] = [];
     protected isExpanded: Map<string, boolean> = new Map<string, boolean>();
     private listSubscription?: Subscription;
 
@@ -42,5 +43,16 @@ export class DoneListComponent implements OnInit, OnDestroy {
 
     onGoBack() {
         this.router.navigate(['/']);
+    }
+
+    listToUndo(listId: string) {
+        this.listsToUndo.push(this.listsDone?.find(list => list.id === listId) as List);
+    }
+
+    onUndoLists() {
+        this.listsToUndo.forEach(list => {
+            this.todoService.updateListStatus(list.id, State.IN_PROGRESS);
+        });
+        this.listsToUndo = [];
     }
 }
