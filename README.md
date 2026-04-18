@@ -60,7 +60,7 @@ For more information on using the Angular CLI, including detailed command refere
 
 ## TO DO
 1. Voir les listes done ✅
-2. Fix: sur une liste expanded, l'ajout d'un nouvel item replie la liste en plus de créer l'item. 
+2. Fix: sur une liste expanded, l'ajout d'un nouvel item replie la liste en plus de créer l'item. ✅
 3. Faire en sorte que les listes soient visibles inter navigateurs et sessions
 4. Github action pour lint & test ok avant de merger. 
 5. Test plus robustes sur les services (et components) ? 

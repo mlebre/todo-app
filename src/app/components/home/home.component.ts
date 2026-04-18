@@ -36,9 +36,6 @@ export class Home implements OnInit, OnDestroy {
             this.listsToDo = lists.filter(list => list.status === State.TODO);
             this.listsProgress = lists.filter(list => list.status === State.IN_PROGRESS);
             this.listsDone = lists.filter(list => list.status === State.DONE);
-            lists.forEach(list => {
-                this.isExpanded.set(list.id, false);
-            });
         });
     }
 
@@ -57,6 +54,10 @@ export class Home implements OnInit, OnDestroy {
 
         dialogRef.closed.subscribe(result => {
             if (result && typeof result === 'string') {
+                // Collapse existing lists
+                this.isExpanded.forEach((_, key) => {
+                    this.isExpanded.set(key, false);
+                });
                 this.todoService.createList(result);
             }
         });
