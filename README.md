@@ -47,6 +47,8 @@ For more information on using the Angular CLI, including detailed command refere
 ## TO DO
 1. Voir les listes done ✅
 2. Fix: sur une liste expanded, l'ajout d'un nouvel item replie la liste en plus de créer l'item. ✅
-3. Faire en sorte que les listes soient visibles inter navigateurs et sessions
-4. Github action pour lint & test ok avant de merger. 
-5. Test plus robustes sur les services (et components) ? 
+3. Github action pour lint & test ok avant de merger. ✅
+4. Test plus robustes sur les services (et components) ? 
+5. Faire en sorte que les listes soient visibles inter navigateurs et sessions --> Avec une solution Backend as service soit via une API dédiée.
+    1. Backend as service (Supabase) : Installation d'un client JS, configuration des tables, Supabase gère l'authentification et l'accès aux données via RLS. 
+    2. API indépendante (Python/FastAPI) : tout à construire mais plus intéressant. On peut choisir l'ORM. FastAPI + SQLAlchemy (ORM) + PostgreSQL. 
