@@ -1,28 +1,50 @@
 name: CI
 on:
-  push:
-    branches: [main]
-  pull_request:
+    push:
+        branches: [main]
+    pull_request:
 
 permissions:
-  contents: read  
+    contents: read
 
 jobs:
-  ci:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    ci:
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: 'Set up node'
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
-      - name: Linting
-        run: npm run lint
-      - name: Testing
-        run: npm run test
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: "Set up node"
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+            - name: Install dependencies
+              run: npm ci
+            - name: Linting
+              run: npm run lint
+            - name: Testing with coverage
+              run: |
+                  set -euo pipefail
+                  npm run test-coverage 2>&1 | tee coverage-output.txt
+            - name: Enforce 90% coverage threshold
+              run: |
+                  set -euo pipefail
+                  
+                  statements=$(grep -E "^[[:space:]]*Statements" coverage-output.txt | awk '{print $3}' | tr -d '%')
+                  branches=$(grep -E "^[[:space:]]*Branches" coverage-output.txt | awk '{print $3}' | tr -d '%')
+                  functions=$(grep -E "^[[:space:]]*Functions" coverage-output.txt | awk '{print $3}' | tr -d '%')
+                  lines=$(grep -E "^[[:space:]]*Lines" coverage-output.txt | awk '{print $3}' | tr -d '%')
+
+                  echo "Coverage summary: statements=${statements}% branches=${branches}% functions=${functions}% lines=${lines}%"
+
+                  awk -v s="$statements" -v b="$branches" -v f="$functions" -v l="$lines" 'BEGIN {
+                    ok = (s >= 90 && b >= 90 && f >= 90 && l >= 90)
+                    if (!ok) {
+                      print "Coverage check failed: all metrics must be >= 90%"
+                      exit 1
+                    }
+                  }'
+            - name: Build
+              run: npm run build      

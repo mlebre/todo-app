@@ -52,7 +52,7 @@ export class Home implements OnInit, OnDestroy {
         // Unsubscribe from previous dialog subscription if it exists
         this.dialogSubscription?.unsubscribe();
 
-        dialogRef.closed.subscribe(result => {
+        this.dialogSubscription = dialogRef.closed.subscribe(result => {
             if (result && typeof result === 'string') {
                 // Collapse existing lists
                 this.isExpanded.forEach((_, key) => {

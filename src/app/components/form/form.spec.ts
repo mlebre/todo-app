@@ -19,4 +19,10 @@ describe('Form', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it('should render template content', () => {
+        const content = fixture.nativeElement.textContent as string;
+
+        expect(content).toContain('form works!');
+    });
 });
