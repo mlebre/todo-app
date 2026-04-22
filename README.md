@@ -1,54 +1,76 @@
 # TodoApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.1.
+TodoApp is an Angular application for managing task lists and their items. You can create lists, add items, mark items as done, and move completed lists to a dedicated screen.
 
-## Development server
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 21.1.3.
 
-To start a local development server, run:
+## Features<>
+
+- Create and name todo lists
+- Add items to each list
+- Mark items as completed
+- Move completed lists to a done screen
+- Restore completed lists to ongoing status
+
+## Tech Stack
+
+- Angular 20
+- TypeScript
+- Karma + Jasmine (unit testing)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (LTS recommended)
+- npm
+
+### Installation and Run
 
 ```bash
-ng serve
+npm install
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Then open your browser at `http://localhost:4200/`.
 
-## Building
+## Available Scripts
 
-To build the project run:
+- `npm start`: Start the development server
+- `npm run build`: Build the project into the `dist/` directory
+- `npm run test`: Run unit tests in headless Chrome
+- `npm run test-coverage `: Run unit tests in headless Chrome with coverage calculation
 
-```bash
-ng build
-```
+## Project Structure
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- `src/app/components`: UI components (lists, items, modal, layout)
+- `src/app/services`: Business logic and local storage handling
+- `src/app/model`: Data models (`list`, `item`)
+- `src/app/testing/mocks`: Test utilities and mocks
 
-## Running unit tests
+## Testing
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner in with chrome headless, use the following command:
+Run unit tests with:
 
 ```bash
 npm run test
+npm run test-coverage
 ```
 
-## Running end-to-end tests
+Coverage reports are generated under `coverage/`.
 
-For end-to-end (e2e) testing, run:
+## Current Limitations
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- Data is currently stored locally and is not shared across browsers/sessions.
+- No end-to-end test suite is configured yet.
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+For more information on using the Angular CLI, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
-## TO DO
-1. Voir les listes done ✅
-2. Fix: sur une liste expanded, l'ajout d'un nouvel item replie la liste en plus de créer l'item. ✅
-3. Github action pour lint & test ok avant de merger. ✅
-4. Test plus robustes sur les services (et components) ? 
-5. Faire en sorte que les listes soient visibles inter navigateurs et sessions --> Avec une solution Backend as service soit via une API dédiée.
-    1. Backend as service (Supabase) : Installation d'un client JS, configuration des tables, Supabase gère l'authentification et l'accès aux données via RLS. 
-    2. API indépendante (Python/FastAPI) : tout à construire mais plus intéressant. On peut choisir l'ORM. FastAPI + SQLAlchemy (ORM) + PostgreSQL. 
+## Roadmap
+1. Add persistent backend storage. 
+Faire en sorte que les listes soient visibles inter navigateurs et sessions --> Avec une solution Backend as service soit via une API dédiée.
+    1. Backend as service (Supabase) : Installation d'un client JS, configuration des tables, Supabase gère l'authentification et l'accès aux données via RLS.
+    2. API indépendante (Python/FastAPI) : tout à construire mais plus intéressant. On peut choisir l'ORM. FastAPI + SQLAlchemy (ORM) + PostgreSQL.
+2. Add end to end tests. 

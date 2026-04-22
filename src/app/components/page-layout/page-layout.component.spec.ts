@@ -18,4 +18,18 @@ describe('PageLayout', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it('should have empty title by default', () => {
+        const raw = TestBed.createComponent(PageLayout);
+
+        expect(raw.componentInstance.title).toBe('');
+    });
+
+    it('should render title input in heading', () => {
+        component.title = 'Dashboard';
+        fixture.detectChanges();
+
+        const heading = fixture.nativeElement.querySelector('h1') as HTMLHeadingElement;
+        expect(heading.textContent?.trim()).toBe('Dashboard');
+    });
 });
