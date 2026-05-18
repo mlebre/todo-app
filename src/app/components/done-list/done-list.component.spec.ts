@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DoneListComponent } from './done-list.component';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { TodoService } from '../../services/todo.service';
 import { List } from '../../model/list';
 import { State } from '../../model/item';
@@ -79,7 +79,7 @@ describe('DoneListComponent', () => {
         const one = makeList('one', State.DONE);
         const two = makeList('two', State.DONE);
         (component as DoneListComponent & { listsToUndo: List[] }).listsToUndo = [one, two];
-
+        todoServiceMock.updateListStatus.and.returnValue(of(undefined));
         component.onUndoLists();
 
         expect(todoServiceMock.updateListStatus).toHaveBeenCalledWith('one', State.IN_PROGRESS);

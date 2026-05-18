@@ -51,7 +51,7 @@ export class DoneListComponent implements OnInit, OnDestroy {
 
     onUndoLists() {
         this.listsToUndo.forEach(list => {
-            this.todoService.updateListStatus(list.id, State.IN_PROGRESS);
+            this.todoService.updateListStatus(list.id, State.IN_PROGRESS).subscribe();
         });
         this.listsToUndo = [];
 

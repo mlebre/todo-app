@@ -6,6 +6,7 @@ import { TodoService } from '../../services/todo.service';
 import { UtilService } from '../../services/util.service';
 import { List } from '../../model/list';
 import { createTodoServiceMock, createUtilServiceMock } from '../../../testing/mocks/component-mocks';
+import { of } from 'rxjs';
 
 describe('ListDisplay', () => {
     let component: ListDisplay;
@@ -73,6 +74,7 @@ describe('ListDisplay', () => {
     });
 
     it('should delete list by id', () => {
+        todoServiceMock.deleteList.and.returnValue(of(undefined));
         component.onDeleteList('test-list-1');
 
         expect(todoServiceMock.deleteList).toHaveBeenCalledWith('test-list-1');
@@ -81,7 +83,7 @@ describe('ListDisplay', () => {
     it('should expand and add item when collapsed', () => {
         component.isExpanded = false;
         spyOn(component, 'onExpandCollapse').and.callThrough();
-
+        todoServiceMock.createItem.and.returnValue(of(undefined));
         component.onAddItem();
 
         expect(component.onExpandCollapse).toHaveBeenCalled();
@@ -91,6 +93,7 @@ describe('ListDisplay', () => {
     it('should add item without toggling when already expanded', () => {
         component.isExpanded = true;
         spyOn(component, 'onExpandCollapse');
+        todoServiceMock.createItem.and.returnValue(of(undefined));
 
         component.onAddItem();
 
@@ -99,6 +102,7 @@ describe('ListDisplay', () => {
     });
 
     it('should delete item from list', () => {
+        todoServiceMock.deleteItem.and.returnValue(of(undefined));
         component.onDeleteItem('test-list-1', 7);
 
         expect(todoServiceMock.deleteItem).toHaveBeenCalledWith('test-list-1', 7);
@@ -106,7 +110,7 @@ describe('ListDisplay', () => {
 
     it('should mark in-progress list as done on check', () => {
         component.list = { ...baseList, status: State.IN_PROGRESS };
-
+        todoServiceMock.updateListStatus.and.returnValue(of(undefined));
         component.onCheckList();
 
         expect(todoServiceMock.updateListStatus).toHaveBeenCalledWith('test-list-1', State.DONE);
@@ -115,7 +119,7 @@ describe('ListDisplay', () => {
     it('should emit undo for non in-progress list on check', () => {
         component.list = { ...baseList, status: State.DONE };
         spyOn(component.undoList, 'emit');
-
+        todoServiceMock.updateListStatus.and.returnValue(of(undefined));
         component.onCheckList();
 
         expect(component.undoList.emit).toHaveBeenCalledWith('test-list-1');

@@ -58,7 +58,7 @@ export class Home implements OnInit, OnDestroy {
                 this.isExpanded.forEach((_, key) => {
                     this.isExpanded.set(key, false);
                 });
-                this.todoService.createList(result);
+                this.todoService.createList(result).subscribe();
             }
         });
     }
@@ -93,7 +93,7 @@ export class Home implements OnInit, OnDestroy {
             );
             const list = event.item.data;
             const newStatus = event.container.id === 'todoList' ? State.TODO : State.IN_PROGRESS;
-            this.todoService.updateListStatus(list.id, newStatus);
+            this.todoService.updateListStatus(list.id, newStatus).subscribe();
         }
     }
 

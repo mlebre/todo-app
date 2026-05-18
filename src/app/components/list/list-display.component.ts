@@ -40,23 +40,23 @@ export class ListDisplay implements OnInit {
     }
 
     onDeleteList(id: string): void {
-        this.todoService.deleteList(id);
+        this.todoService.deleteList(id).subscribe();
     }
 
     onAddItem(): void {
         if (!this.isExpanded) {
             this.onExpandCollapse();
         }
-        this.todoService.createItem(this.list.id, '');
+        this.todoService.createItem(this.list.id, '').subscribe();
     }
 
     onDeleteItem(listId: string, itemId: number): void {
-        this.todoService.deleteItem(listId, itemId);
+        this.todoService.deleteItem(listId, itemId).subscribe();
     }
 
     onCheckList(): void {
         if (this.list.status === State.IN_PROGRESS) {
-            this.todoService.updateListStatus(this.list.id, State.DONE);
+            this.todoService.updateListStatus(this.list.id, State.DONE).subscribe();
         } else {
             this.undoList.emit(this.list.id);
         }
