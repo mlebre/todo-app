@@ -60,7 +60,7 @@ describe('TodoService', () => {
         const testUuid = '11111111-1111-1111-1111-111111111111';
         spyOn(globalThis.crypto, 'randomUUID').and.returnValue(testUuid);
 
-        service.createList('New List');
+        service.createList('New List').subscribe();
 
         const lists = latestLists();
         expect(lists.length).toBe(1);
@@ -75,7 +75,7 @@ describe('TodoService', () => {
         const initial = [makeList('list-1'), makeList('list-2')];
         setup(initial);
 
-        service.deleteList('list-1');
+        service.deleteList('list-1').subscribe();
 
         const lists = latestLists();
         expect(lists.length).toBe(1);
@@ -107,7 +107,7 @@ describe('TodoService', () => {
         ];
         setup(initial);
 
-        service.createItem('list-1', 'Third');
+        service.createItem('list-1', 'Third').subscribe();
 
         const items = latestLists()[0].items;
         expect(items.length).toBe(3);
@@ -123,7 +123,7 @@ describe('TodoService', () => {
         const initial = [makeList('list-1')];
         setup(initial);
 
-        service.createItem('unknown', 'Ignored');
+        service.createItem('unknown', 'Ignored').subscribe();
 
         expect(latestLists()).toEqual(initial);
         expect(localStorageServiceMock.saveLists).not.toHaveBeenCalled();
@@ -153,7 +153,7 @@ describe('TodoService', () => {
         ];
         setup(initial);
 
-        service.deleteItem('list-1', 2);
+        service.deleteItem('list-1', 2).subscribe();
 
         const list = latestLists()[0];
         expect(list.items.length).toBe(1);
@@ -166,7 +166,7 @@ describe('TodoService', () => {
         const initial = [makeList('list-1')];
         setup(initial);
 
-        service.deleteItem('unknown', 1);
+        service.deleteItem('unknown', 1).subscribe();
 
         expect(latestLists()).toEqual(initial);
         expect(localStorageServiceMock.saveLists).not.toHaveBeenCalled();
@@ -176,7 +176,7 @@ describe('TodoService', () => {
         const initial = [makeList('list-1', State.TODO)];
         setup(initial);
 
-        service.updateListStatus('list-1', State.IN_PROGRESS);
+        service.updateListStatus('list-1', State.IN_PROGRESS).subscribe();
 
         const list = latestLists()[0];
         expect(list.status).toBe(State.IN_PROGRESS);
@@ -188,7 +188,7 @@ describe('TodoService', () => {
         const initial = [makeList('list-1')];
         setup(initial);
 
-        service.updateListStatus('unknown', State.DONE);
+        service.updateListStatus('unknown', State.DONE).subscribe();
 
         expect(latestLists()).toEqual(initial);
         expect(localStorageServiceMock.saveLists).not.toHaveBeenCalled();

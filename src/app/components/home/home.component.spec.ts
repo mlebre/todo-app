@@ -72,7 +72,7 @@ describe('Home', () => {
         (component as Home & { isExpanded: Map<string, boolean> }).isExpanded.set('a', true);
         (component as Home & { isExpanded: Map<string, boolean> }).isExpanded.set('b', true);
         openSpy.and.returnValue({ closed: of('New List') } as never);
-
+        todoServiceMock.createList.and.returnValue(of(undefined));
         component.onCreateList();
 
         expect(previousSubscription.unsubscribe).toHaveBeenCalled();
@@ -112,6 +112,7 @@ describe('Home', () => {
             currentIndex: 2,
             item: { data: makeList('x', State.TODO) },
         };
+        todoServiceMock.updateListStatus.and.returnValue(of(undefined));
 
         component.onListDropped(event);
 
@@ -129,9 +130,10 @@ describe('Home', () => {
             currentIndex: 0,
             item: { data: makeList('todo-1', State.TODO) },
         };
+        todoServiceMock.updateListStatus.and.returnValue(of(undefined));
 
         component.onListDropped(event);
-
+        
         expect(todoList.length).toBe(0);
         expect(progressList.length).toBe(1);
         expect(todoServiceMock.updateListStatus).toHaveBeenCalledWith('todo-1', State.IN_PROGRESS);
