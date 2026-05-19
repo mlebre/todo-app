@@ -133,7 +133,7 @@ describe('Home', () => {
         todoServiceMock.updateListStatus.and.returnValue(of(undefined));
 
         component.onListDropped(event);
-        
+
         expect(todoList.length).toBe(0);
         expect(progressList.length).toBe(1);
         expect(todoServiceMock.updateListStatus).toHaveBeenCalledWith('todo-1', State.IN_PROGRESS);

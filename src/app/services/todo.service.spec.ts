@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { State } from '../model/item';
 import { List } from '../model/list';
-import { LocalStorageService } from './local-storage.service';
 import { TodoService } from './todo.service';
+import { of } from 'rxjs';
+import { DataService } from './data.service';
 
 describe('TodoService', () => {
     let service: TodoService;
-    let localStorageServiceMock: jasmine.SpyObj<LocalStorageService>;
+    let dataServiceMock: jasmine.SpyObj<DataService>;
 
     const makeList = (id: string, status = State.TODO): List => ({
         id,
@@ -17,15 +18,16 @@ describe('TodoService', () => {
     });
 
     const setup = (initialLists: List[] = []) => {
-        localStorageServiceMock = jasmine.createSpyObj<LocalStorageService>('LocalStorageService', [
-            'loadLists',
-            'saveLists',
-        ]);
-        localStorageServiceMock.loadLists.and.returnValue(initialLists);
+        dataServiceMock = jasmine.createSpyObj<DataService>('DataService', ['fetchLists', 'saveLists']);
+        dataServiceMock.fetchLists.and.returnValue(of(initialLists));
+        dataServiceMock.saveLists.and.callFake((lists: List[]) => {
+            dataServiceMock.fetchLists.and.returnValue(of(lists));
+            return of(undefined);
+        });
 
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [TodoService, { provide: LocalStorageService, useValue: localStorageServiceMock }],
+            providers: [TodoService, { provide: DataService, useValue: dataServiceMock }],
         });
 
         service = TestBed.inject(TodoService);
@@ -48,11 +50,11 @@ describe('TodoService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should initialize state from LocalStorageService', () => {
+    it('should initialize state from dataService', () => {
         const initial = [makeList('list-1')];
         setup(initial);
 
-        expect(localStorageServiceMock.loadLists).toHaveBeenCalled();
+        expect(dataServiceMock.fetchLists).toHaveBeenCalled();
         expect(latestLists()).toEqual(initial);
     });
 
@@ -68,7 +70,7 @@ describe('TodoService', () => {
         expect(lists[0].title).toBe('New List');
         expect(lists[0].status).toBe(State.TODO);
         expect(lists[0].createdAt).toEqual(jasmine.any(Date));
-        expect(localStorageServiceMock.saveLists).toHaveBeenCalledWith(lists);
+        expect(dataServiceMock.saveLists).toHaveBeenCalledWith(lists);
     });
 
     it('should delete list and persist remaining lists', () => {
@@ -80,7 +82,7 @@ describe('TodoService', () => {
         const lists = latestLists();
         expect(lists.length).toBe(1);
         expect(lists[0].id).toBe('list-2');
-        expect(localStorageServiceMock.saveLists).toHaveBeenCalledWith(lists);
+        expect(dataServiceMock.saveLists).toHaveBeenCalledWith(lists);
     });
 
     it('should create item with max id + 1 and persist', () => {
@@ -116,7 +118,7 @@ describe('TodoService', () => {
         expect(items[2].new).toBeTrue();
         expect(items[2].status).toBe(State.TODO);
         expect(items[2].createdAt).toEqual(jasmine.any(Date));
-        expect(localStorageServiceMock.saveLists).toHaveBeenCalled();
+        expect(dataServiceMock.saveLists).toHaveBeenCalled();
     });
 
     it('should do nothing for createItem with unknown list id', () => {
@@ -126,7 +128,7 @@ describe('TodoService', () => {
         service.createItem('unknown', 'Ignored').subscribe();
 
         expect(latestLists()).toEqual(initial);
-        expect(localStorageServiceMock.saveLists).not.toHaveBeenCalled();
+        expect(dataServiceMock.saveLists).not.toHaveBeenCalled();
     });
 
     it('should delete item, update list timestamp and persist', () => {
@@ -159,7 +161,7 @@ describe('TodoService', () => {
         expect(list.items.length).toBe(1);
         expect(list.items[0].id).toBe(1);
         expect(list.updatedAt).toEqual(jasmine.any(Date));
-        expect(localStorageServiceMock.saveLists).toHaveBeenCalled();
+        expect(dataServiceMock.saveLists).toHaveBeenCalled();
     });
 
     it('should do nothing for deleteItem with unknown list id', () => {
@@ -169,7 +171,7 @@ describe('TodoService', () => {
         service.deleteItem('unknown', 1).subscribe();
 
         expect(latestLists()).toEqual(initial);
-        expect(localStorageServiceMock.saveLists).not.toHaveBeenCalled();
+        expect(dataServiceMock.saveLists).not.toHaveBeenCalled();
     });
 
     it('should update list status and persist', () => {
@@ -181,7 +183,7 @@ describe('TodoService', () => {
         const list = latestLists()[0];
         expect(list.status).toBe(State.IN_PROGRESS);
         expect(list.updatedAt).toEqual(jasmine.any(Date));
-        expect(localStorageServiceMock.saveLists).toHaveBeenCalled();
+        expect(dataServiceMock.saveLists).toHaveBeenCalled();
     });
 
     it('should do nothing for updateListStatus with unknown list id', () => {
@@ -191,6 +193,6 @@ describe('TodoService', () => {
         service.updateListStatus('unknown', State.DONE).subscribe();
 
         expect(latestLists()).toEqual(initial);
-        expect(localStorageServiceMock.saveLists).not.toHaveBeenCalled();
+        expect(dataServiceMock.saveLists).not.toHaveBeenCalled();
     });
 });

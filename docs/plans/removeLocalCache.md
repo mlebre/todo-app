@@ -13,6 +13,7 @@ Strategy chosen: **re-fetch after each write** (generic, works with any backend)
 ### Phase 1 — Abstract contract
 
 **NEW** `src/app/services/data.service.ts` — abstract class `DataService` with two methods:
+
 - `fetchLists(): Observable<List[]>`
 - `saveLists(lists: List[]): Observable<void>`
 
@@ -23,21 +24,23 @@ The interface intentionally stays at "whole array" level. Fine-grained REST/Supa
 ### Phase 2 — Local implementation
 
 **NEW** `src/app/services/local-storage-data.service.ts` — `LocalStorageDataService extends DataService`:
+
 - `fetchLists()` → wraps existing `localStorageService.loadLists()` in `of(...)`
 - `saveLists(lists)` → calls `localStorageService.saveLists(lists)`, returns `of(undefined)`
 - Injects existing `LocalStorageService` (unchanged)
 
 ---
 
-### Phase 3 — Refactor TodoService *(parallel with Phase 2)*
+### Phase 3 — Refactor TodoService _(parallel with Phase 2)_
 
 **MODIFY** `src/app/services/todo.service.ts`:
+
 - Inject `DataService` instead of `LocalStorageService`
 - Constructor: `this.dataService.fetchLists().subscribe(lists => this.lists$.next(lists))`
 - Every mutation method replaces `lists$.next(...) + saveLists(...)` with a pipe chain:
-  ```
-  saveLists(newLists) → switchMap(() => fetchLists()) → tap(lists => lists$.next(lists)) → map(() => undefined)
-  ```
+    ```
+    saveLists(newLists) → switchMap(() => fetchLists()) → tap(lists => lists$.next(lists)) → map(() => undefined)
+    ```
 - Add `switchMap`, `tap`, `map` to rxjs imports
 
 ---
@@ -45,6 +48,7 @@ The interface intentionally stays at "whole array" level. Fine-grained REST/Supa
 ### Phase 4 — Wire DI
 
 **MODIFY** `src/app/app.config.ts` — add to `providers`:
+
 ```ts
 { provide: DataService, useClass: LocalStorageDataService }
 ```
@@ -54,32 +58,15 @@ The interface intentionally stays at "whole array" level. Fine-grained REST/Supa
 ### Phase 5 — Update service tests
 
 **MODIFY** `src/app/services/todo.service.spec.ts`:
+
 - Replace `LocalStorageService` spy with `DataService` spy (`fetchLists`, `saveLists`)
 - `setup(initialLists)` configures:
-  ```ts
-  dataServiceMock.fetchLists.and.returnValue(of(initialLists));
-  dataServiceMock.saveLists.and.returnValue(of(undefined));
-  ```
+    ```ts
+    dataServiceMock.fetchLists.and.returnValue(of(initialLists));
+    dataServiceMock.saveLists.and.returnValue(of(undefined));
+    ```
 - Tests that assert post-mutation state: reconfigure `fetchLists.and.returnValue(of(expectedResult))` inline before calling the method, so the re-fetch returns the right data
 - Assertions on `saveLists` call arguments and `latestLists()` remain structurally identical
-
----
-
-## Files changed
-
-| File | Change |
-|---|---|
-| `src/app/services/data.service.ts` | **NEW** — abstract class |
-| `src/app/services/local-storage-data.service.ts` | **NEW** — local implementation |
-| `src/app/services/todo.service.ts` | Inject `DataService`, async mutation pattern |
-| `src/app/services/todo.service.spec.ts` | Mock `DataService` instead of `LocalStorageService` |
-| `src/app/app.config.ts` | Register `LocalStorageDataService` as `DataService` |
-
-## Unchanged files
-
-- All component `.ts` and `.spec.ts` files
-- `src/app/services/local-storage.service.ts` and its spec (becomes internal to `LocalStorageDataService`)
-- `src/app/services/util.service.ts` and its spec
 
 ---
 
