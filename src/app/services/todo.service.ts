@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { List } from '../model/list';
-import { LocalStorageService } from './local-storage.service';
 import { State } from '../model/item';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, take, tap } from 'rxjs';
+import { DataService } from './data.service';
 
 @Injectable({
     providedIn: 'root',
@@ -10,8 +10,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class TodoService {
     private lists$: BehaviorSubject<List[]> = new BehaviorSubject<List[]>([]);
 
-    constructor(private localStorageService: LocalStorageService) {
-        this.lists$.next(this.localStorageService.loadLists());
+    constructor(private dataService: DataService) {
+        this.dataService
+            .fetchLists()
+            .pipe(
+                take(1),
+                catchError(() => of([]))
+            )
+            .subscribe(lists => this.lists$.next(lists));
     }
 
     readonly lists = this.lists$.asObservable();
@@ -25,72 +31,76 @@ export class TodoService {
             status: State.TODO,
         };
         const updatedLists = [...this.lists$.getValue(), newList];
-        this.lists$.next(updatedLists);
-        this.localStorageService.saveLists(updatedLists);
-        return new Observable<void>(observer => {
-            observer.next();
-            observer.complete();
-        });
+
+        return this.dataService.saveLists(updatedLists).pipe(
+            switchMap(() => this.dataService.fetchLists()),
+            tap(fetchedLists => this.lists$.next(fetchedLists)),
+            map(() => undefined)
+        );
     }
 
     deleteList(id: string): Observable<void> {
         const updatedLists = this.lists$.getValue().filter(list => list.id !== id);
-        this.lists$.next(updatedLists);
-        this.localStorageService.saveLists(updatedLists);
-        return new Observable<void>(observer => {
-            observer.next();
-            observer.complete();
-        });
+        return this.dataService.saveLists(updatedLists).pipe(
+            switchMap(() => this.dataService.fetchLists()),
+            tap(fetchedLists => this.lists$.next(fetchedLists)),
+            map(() => undefined)
+        );
     }
 
     createItem(listId: string, title: string): Observable<void> {
         const lists = this.lists$.getValue();
         const list = lists.find(l => l.id === listId);
-        if (list) {
-            list.items.push({
-                id: Math.max(0, ...list.items.map(item => item.id)) + 1,
-                title: title,
-                createdAt: new Date(),
-                status: State.TODO,
-                new: true,
-            });
-            this.lists$.next(lists);
-            this.localStorageService.saveLists(lists);
+        if (!list) {
+            return of(undefined);
         }
-        return new Observable<void>(observer => {
-            observer.next();
-            observer.complete();
+
+        list.items.push({
+            id: Math.max(0, ...list.items.map(item => item.id)) + 1,
+            title: title,
+            createdAt: new Date(),
+            status: State.TODO,
+            new: true,
         });
+
+        return this.dataService.saveLists(lists).pipe(
+            switchMap(() => this.dataService.fetchLists()),
+            tap(fetchedLists => this.lists$.next(fetchedLists)),
+            map(() => undefined)
+        );
     }
 
     deleteItem(listId: string, itemId: number): Observable<void> {
         const lists = this.lists$.getValue();
         const list = lists.find(l => l.id === listId);
-        if (list) {
-            list.items = list.items.filter(item => item.id !== itemId);
-            list.updatedAt = new Date();
-            this.lists$.next(lists);
-            this.localStorageService.saveLists(lists);
+        if (!list) {
+            return of(undefined);
         }
-        return new Observable<void>(observer => {
-            observer.next();
-            observer.complete();
-        });
 
+        list.items = list.items.filter(item => item.id !== itemId);
+        list.updatedAt = new Date();
+
+        return this.dataService.saveLists(lists).pipe(
+            switchMap(() => this.dataService.fetchLists()),
+            tap(fetchedLists => this.lists$.next(fetchedLists)),
+            map(() => undefined)
+        );
     }
 
     updateListStatus(listId: string, newStatus: State): Observable<void> {
         const lists = this.lists$.getValue();
         const list = lists.find(l => l.id === listId);
-        if (list) {
-            list.status = newStatus;
-            list.updatedAt = new Date();
-            this.lists$.next(lists);
-            this.localStorageService.saveLists(lists);
+        if (!list) {
+            return of(undefined);
         }
-        return new Observable<void>(observer => {
-            observer.next();
-            observer.complete();
-        });
+
+        list.status = newStatus;
+        list.updatedAt = new Date();
+
+        return this.dataService.saveLists(lists).pipe(
+            switchMap(() => this.dataService.fetchLists()),
+            tap(fetchedLists => this.lists$.next(fetchedLists)),
+            map(() => undefined)
+        );
     }
 }
